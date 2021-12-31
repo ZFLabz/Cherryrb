@@ -11,7 +11,7 @@ require '.\hhDownloader.rb'
 require '.\hiDownloader.rb'
 require '.\kDownloader.rb'
 require '.\rbDownloader.rb'
-require '.\rDownloader.rb'
+#require '.\rDownloader.rb' // Tuve que quitar esto por un error con open-uri
 require '.\sDownloader.rb'
 require '.\xDownloader.rb'
 require '.\yDownloader.rb'
@@ -70,7 +70,7 @@ def main_menu
 	menu_option = gets.chomp
 	if menu_option == '1'
 		system('cls')
-		Rule34.downloader
+		require '.\rDownloader.rb'
 	elsif menu_option == '2'
 		system('cls')
 		Gelbooru.downloader
