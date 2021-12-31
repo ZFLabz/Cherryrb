@@ -74,13 +74,15 @@ class Rule34
 
 					#download the file
 					puts 'Post descargado satisfactoriamente'.green
+					puts 'presiona [ENTER] para volver a CherryCMD'
+					gets
+					system ('cls')
+					require('.\Cherry.rb')
 				end
 			rescue
 				puts 'An error occurred while trying to contact the API. Try again.'.red
-			puts 'presiona [ENTER] para volver a CherryCMD'
-			gets
-			system ('cls')
-			require('.\Cherry.rb')
+			
 
 		end
 	end
+end
