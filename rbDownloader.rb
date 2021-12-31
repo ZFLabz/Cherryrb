@@ -4,88 +4,95 @@ require 'open-uri'
 require 'colorize'
 require 'crack'
 
-def downloader
+class Realbooru
 
-	#Menu
-	puts 'Cherry NSFW Tools| Realbooru Downloader'.red
-	#Ask the user for the tags
-	puts 'Introduzca a continuacion los tags a descargar:'
-	tags = gets.chomp
-	tags = tags.gsub(' ', '%20')
-	#Ask the user for the initial page
-	#puts 'Se van a descargar 5 Imagenes de ' + tags
-	#Ask the user for the initial post limit
-	puts 'Introduzca a continuacion el limite de posts a descargar:'
-	limit = gets.chomp
-	#Obtencion de datos
+	def Realbooru.downloader
 
-	url = 'https://realbooru.com/index.php?page=dapi&s=post&q=index' + '&tags=' + tags + '&pid=1&limit=' + limit
+		#Menu
+		puts 'Cherry NSFW Tools| Realbooru Downloader'.red
+		#Ask the user for the tags
+		puts 'Introduzca a continuacion los tags a descargar:'
+		tags = gets.chomp
+		tags = tags.gsub(' ', '%20')
+		#Ask the user for the initial page
+		#puts 'Se van a descargar 5 Imagenes de ' + tags
+		#Ask the user for the initial post limit
+		puts 'Introduzca a continuacion el limite de posts a descargar:'
+		limit = gets.chomp
+		#Obtencion de datos
 
-	puts url
+		if limit == '1'
 
-	uri = URI(url)
+			limit = '2'
 
-	response = Net::HTTP.get(uri, {'User-Agent' => 'tag_downloader'})
+		url = 'https://realbooru.com/index.php?page=dapi&s=post&q=index' + '&tags=' + tags + '&pid=1&limit=' + limit
 
-	#Converts XML to JSON
+		puts url
 
-	xmldata = Crack::XML.parse(URI.open(url))
+		uri = URI(url)
 
-	#saves the json
+		response = Net::HTTP.get(uri, {'User-Agent' => 'tag_downloader'})
 
-	jsondata = xmldata.to_json
+		#Converts XML to JSON
 
-	open('./utils/realbooru.json', 'w') do |fo|
+		xmldata = Crack::XML.parse(URI.open(url))
 
-		fo.write(jsondata)
+		#saves the json
+
+		jsondata = xmldata.to_json
+
+		open('./utils/realbooru.json', 'wb') do |fo|
+
+			fo.write(jsondata)
+
+		end
+
+		#parse the json
+
+		file = File.read('./utils/realbooru.json')
+
+		json_hash = JSON.parse(file)
+
+		#puts json_hash[0]["id"]
+
+		#puts json_hash.length
+
+		#puts id
+
+		#puts json_hash["posts offset"]
+
+		for i in (0..limit.to_i)
+			begin
+				id = json_hash["posts"]["post"][i]["id"]
+				puts"Iniciando la descarga del post #" + id
+				#puts the number of the image starting by 0
+				puts i
+				#Gets the url of the image
+				url = json_hash["posts"]["post"][i]["file_url"]
+				puts 'Link del archivo: ' + url
+
+			#gets the extension
+
+				extension = url.split('.')[2]
+
+				destination = '/downloads/Realbooru/' + id + '.' + extension
+
+				open(Dir.pwd() +  destination, 'wb') do |fo|
+					fo.write URI.open(url).read
+				end
+
+				#download the file
+				puts 'Post descargado satisfactoriamente'.green
+			rescue
+				File.truncate('./utils/realbooru.json', 0)
+				puts 'Operacion finalizada'.green
+		end
+	end
+		puts 'presiona [ENTER] para volver a CherryCMD'
+		gets
+		system ('cls')
+		require('.\Cherry.rb')
 
 	end
-
-	#parse the json
-
-	file = File.read('./utils/realbooru.json')
-
-	json_hash = JSON.parse(file)
-
-	#puts json_hash[0]["id"]
-
-	#puts json_hash.length
-
-	#puts id
-
-	#puts json_hash["posts offset"]
-
-	for i in (0..limit.to_i)
-		begin
-			id = json_hash["posts"]["post"][i]["id"]
-			puts"Iniciando la descarga del post #" + id
-			#puts the number of the image starting by 0
-			puts i
-			#Gets the url of the image
-			url = json_hash["posts"]["post"][i]["file_url"]
-			puts 'Link del archivo: ' + url
-
-		#gets the extension
-
-			extension = url.split('.')[2]
-
-			destination = '/downloads/Realbooru/' + id + '.' + extension
-
-			open(Dir.pwd() +  destination, 'wb') do |fo|
-				fo.write URI.open(url).read
-			end
-
-			#download the file
-			puts 'Post descargado satisfactoriamente'.green
-		rescue
-			puts 'Operacion finalizada'.green
 	end
 end
-	puts 'Presione [ENTER] Para Cerrar'
-	gets
-	system('cls')
-	exit
-
-end
-
-downloader()
