@@ -11,7 +11,7 @@ require '.\hhDownloader.rb'
 require '.\hiDownloader.rb'
 require '.\kDownloader.rb'
 require '.\rbDownloader.rb'
-#require '.\rDownloader.rb' // Tuve que quitar esto por un error con open-uri
+require '.\rDownloader.rb' # Tuve que quitar esto por un error con open-uri
 require '.\sDownloader.rb'
 require '.\xDownloader.rb'
 require '.\yDownloader.rb'
@@ -70,7 +70,8 @@ def main_menu
 	menu_option = gets.chomp
 	if menu_option == '1'
 		system('cls')
-		require '.\rDownloader.rb'
+		#require '.\rDownloader.rb'
+		Rule34.downloader
 	elsif menu_option == '2'
 		system('cls')
 		Gelbooru.downloader
@@ -128,7 +129,7 @@ def start_screen
   / ____/ / / / ____/ __ \\/ __ \\ \\/ /	|
  / /   / /_/ / __/ / /_/ / /_/ /\\  /	|	Cherry Booru &
 / /___/ __  / /___/ _, _/ _, _/ / /	|	Image Downloader
-\\____/_/ /_/_____/_/ |_/_/ |_| /_/	|	Ver.rb.1.2.3
+\\____/_/ /_/_____/_/ |_/_/ |_| /_/	|	Ver.rb.1.2.3_1
 
     LOGO
     .red
