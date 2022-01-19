@@ -21,11 +21,7 @@ class Realbooru
 		limit = gets.chomp
 		#Obtencion de datos
 
-		if limit == '1'
-
-			limit = '2'
-
-		url = 'https://realbooru.com/index.php?page=dapi&s=post&q=index' + '&tags=' + tags + '&pid=1&limit=' + limit
+		url = 'https://realbooru.com/index.php?page=dapi&s=post&q=index' + '&tags=' + tags + '&pid=1&limit=' + limit.to_s
 
 		puts url
 
@@ -93,6 +89,5 @@ class Realbooru
 		system ('cls')
 		require('.\Cherry.rb')
 
-	end
 	end
 end
